@@ -24,3 +24,27 @@
     BoxLayout:
         size_hint_y: 0.45
         
+<DataBaseWid>
+    orientation: 'vertical'
+    canvas:
+        Color:
+            rgb: 0.3, 0.3, 0.9
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    ScrollView:
+        size: self.size
+        GridLayout:
+            id: container
+            padding: [10, 10, 10, 10]
+            spacing: 5
+            size_hint_y: None
+            cols: 1
+            row_default_height: root.height * 0.2
+            height: self.minimum_height
+
+<NewDataButton>
+    font_size: self.height * 0.5
+    text: '+'
+    on_press: root.create_new_product()
+
