@@ -1,0 +1,26 @@
+
+<MainWid>
+    canvas:
+        Color:
+            rgb: 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<StartWid>
+    orientation: 'vertical'
+    canvas:
+        Color:
+            rgb: 0.3, 0.3, 0.9
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        size_hint_y: 0.45
+    ToggleButton:
+        text:'Create/Enter Database'
+        size_hint_y: 0.1
+        on_press: root.create_database()
+    BoxLayout:
+        size_hint_y: 0.45
+        
