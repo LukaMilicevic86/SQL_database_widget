@@ -1,5 +1,3 @@
-#22:34
-
 
 import kivy
 import sqlite3
@@ -11,7 +9,7 @@ from kivy.uix.button import Button
 from kivy.app import App
 from kivy.config import Config
 
-# set the window size:
+# set the default window size:
 Config.set("graphics", "width", "340")
 Config.set("graphics", "width", "500")
 
@@ -20,9 +18,26 @@ Config.set("graphics", "width", "500")
 def connect_to_database(path):
     try:
         con = sqlite3.connect(path)
+        cursor = con.cursor()
+        create_table_products(cursor)
+        con.commit()
         con.close()
     except Exception as e:
         print(e)
+
+# create database table using SQL syntax
+def create_table_products(cursor):
+    cursor.execute(
+        """
+        CREATE TABLE IF NOT EXISTS products(
+            ID          INTEGER     PRIMARY KEY     AUTOINCREMENT,
+            Name        TEXT        NOT NULL,
+            Code        TEXT        NOT NULL,
+            Price       FLOAT       NOT NULL,
+            Quantity    INT         NOT NULL
+        )
+        """
+    )
 
 
 # Mmin widget class:
