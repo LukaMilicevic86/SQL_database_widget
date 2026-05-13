@@ -54,6 +54,27 @@ class MainWid(ScreenManager):
         ST_wid.add_widget(self.StartWid)
         self.add_widget(ST_wid)
 
+        # add database widget to screen
+        self.DataBaseWid = DataBaseWid(self)
+        DB_wid = Screen(name = "Database")
+        DB_wid.add_widget(self.DataBaseWid)
+        self.add_widget(DB_wid)
+
+        self.go_to_start()
+
+    # open the start widget as current screen
+
+    def go_to_start(self):
+        self.current = "Start"
+
+    # open the database widget as current screen
+
+    def go_to_database(self):
+        self.DataBaseWid.check_memory()
+        self.current = "Database"
+
+
+
 
 # start widget class:
 class StartWid(BoxLayout):
@@ -64,6 +85,33 @@ class StartWid(BoxLayout):
     # method to create the database using the path from the mainwid
     def create_database(self):
         connect_to_database(self.mainwid.DB_PATH) 
+        self.mainwid.go_to_database()
+
+
+# database widget class:    
+class DataBaseWid(BoxLayout):
+    def __init__(self, mainwid, **kwargs):
+        super().__init__()
+        self.mainwid = mainwid
+    
+    # method to delete everything from screen and add everything that is present in the database
+
+    def check_memory(self):
+        self.ids.container.clear_widgets()
+
+        wid = NewDataButton(self.mainwid)
+        self.ids.container.add_widget(wid)
+
+
+
+# product entry button:
+class NewDataButton(Button):
+    def __init__(self, mainwid, **kwargs):
+        super().__init__()
+        self.mainwid = mainwid
+
+    def create_new_product(self):
+        print("Product to be added")
 
 
 # main app class and instance:
