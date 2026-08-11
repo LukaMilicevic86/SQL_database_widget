@@ -60,20 +60,29 @@ class MainWid(ScreenManager):
         DB_wid.add_widget(self.DataBaseWid)
         self.add_widget(DB_wid)
 
+        # add insert data widget to screen
+        self.InsertDataWid = InsertDataWid(self)
+        IDW_wid = Screen(name = "InsertData")
+        IDW_wid.add_widget(self.InsertDataWid)
+        self.add_widget(IDW_wid)
+
         self.go_to_start()
 
     # open the start widget as current screen
-
     def go_to_start(self):
         self.current = "Start"
 
     # open the database widget as current screen
-
     def go_to_database(self):
         self.DataBaseWid.check_memory()
         self.current = "Database"
 
-
+    #reset everything in insert data widget and open that screen
+    def go_to_insertdata(self):
+        self.InsertDataWid.clear_widgets() #clears everything from last time
+        IDW_wid = InsertDataWid(self)
+        self.InsertDataWid.add_widget(IDW_wid)
+        self.current  = "InsertData"
 
 
 # start widget class:
@@ -99,7 +108,7 @@ class DataBaseWid(BoxLayout):
     def check_memory(self):
         self.ids.container.clear_widgets()
 
-        wid = NewDataButton(self.mainwid)
+        wid = NewDataButton(self.mainwid) 
         self.ids.container.add_widget(wid)
 
 
@@ -111,7 +120,21 @@ class NewDataButton(Button):
         self.mainwid = mainwid
 
     def create_new_product(self):
-        print("Product to be added")
+        self.mainwid.go_to_insertdata() 
+
+# widget to create new product and fill the data in the table columns
+class InsertDataWid(BoxLayout):
+    def __init__(self, mainwid, **kwargs):
+        super().__init__()
+        self.mainwid = mainwid
+
+    #methhod to fill in the data windows for columns in the table
+    def insert_data(self):
+        print("insert data")
+
+    #return to the database widget upon pressing Exit
+    def back_to_dbw(self):
+        self.mainwid.go_to_database()
 
 
 # main app class and instance:
