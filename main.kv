@@ -96,6 +96,18 @@
             text: 'Exit'
             on_press: root.back_to_dbw()
 
+<MessagePopup>
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            id: message
+            size_hint: 1, 0.8
+        Button:
+            size_hint: 1, 0.2
+            text:'Back'
+            on_press: root.dismiss()
+
+
 
 
 
