@@ -66,6 +66,8 @@ class MainWid(ScreenManager):
         IDW_wid.add_widget(self.InsertDataWid)
         self.add_widget(IDW_wid)
 
+        self.Popup = MessagePopup()
+
         self.go_to_start()
 
     # open the start widget as current screen
@@ -121,6 +123,10 @@ class NewDataButton(Button):
     def create_new_product(self):
         self.mainwid.go_to_insertdata() 
 
+#class for the message popup window:
+class MessagePopup(Popup):
+    ...
+
 # widget to create new product and fill the data in the table columns
 class InsertDataWid(BoxLayout):
     def __init__(self, mainwid, **kwargs):
@@ -151,13 +157,13 @@ class InsertDataWid(BoxLayout):
 
         except Exception as e:
             print(str(e))
-            #message = self.mainwid.Popup.ids.message
-            #self.mainwid.Popup.open()
-            #self.mainwid.Popup.title = "Error!"
-            #if "" in a1:
-             #   message.text = "One or more fields empty"
-            #else:
-             #   message.text = str(e)
+            message = self.mainwid.Popup.ids.message
+            self.mainwid.Popup.open()
+            self.mainwid.Popup.title = "Error!"
+            if "" in a1:
+               message.text = "One or more fields empty"
+            else:
+               message.text = str(e)
 
     #return to the database widget upon pressing Exit
     def back_to_dbw(self):
