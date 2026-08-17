@@ -87,7 +87,7 @@ class MainWid(ScreenManager):
         self.current  = "InsertData"
 
 
-# start widget class:
+# 1st screen, start widget class:
 class StartWid(BoxLayout):
     def __init__(self, mainwid, **kwargs):
         super().__init__()
@@ -99,7 +99,7 @@ class StartWid(BoxLayout):
         self.mainwid.go_to_database()
 
 
-# database widget class:    
+# 2nd screen, database widget class:    
 class DataBaseWid(BoxLayout):
     def __init__(self, mainwid, **kwargs):
         super().__init__()
@@ -109,9 +109,24 @@ class DataBaseWid(BoxLayout):
     def check_memory(self):
         self.ids.container.clear_widgets()
 
+        con = sqlite3.connect(self.mainwid.DB_PATH) #connect to database
+        cursor = con.cursor()
+        cursor.execute(
+            'SELECT ID, Name, Code, Price, Quantity FROM products'
+        )
+        for element in cursor:
+            Dwid = DataWid(self.mainwid)
+            r1 = "ID: " + str(element[0]) + "\n" #element zero is ID
+            r2 = element[1] + ", " + element[2] + "\n"
+            r3 = "Price: " + str(element[3]) + "\n"
+            r4 = "Quantity: " + str(element[4]) + "\n"
+            Dwid.data_id = str(element[0]) #connects the primary key from the table to an ID to be used for editing
+            Dwid.data = r1 + r2 + r3 + r4
+            self.ids.container.add_widget(Dwid)
+
         NDBwid = NewDataButton(self.mainwid) 
         self.ids.container.add_widget(NDBwid)
-
+        con.close()
 
 
 # product entry button:
@@ -123,11 +138,18 @@ class NewDataButton(Button):
     def create_new_product(self):
         self.mainwid.go_to_insertdata() 
 
-#class for the message popup window:
+# class for the message popup window:
 class MessagePopup(Popup):
     ...
 
-# widget to create new product and fill the data in the table columns
+# class for widgets to populate 2nd screen upon inserting data in the 3d
+class DataWid(BoxLayout):
+    def __init__(self, mainwid, **kwargs):
+            super().__init__()
+            self.mainwid = mainwid
+    def update_data(self, data_id):
+        ...
+# 3rd screen, widget to create new product and fill the data in the table columns
 class InsertDataWid(BoxLayout):
     def __init__(self, mainwid, **kwargs):
         super().__init__()
@@ -156,7 +178,6 @@ class InsertDataWid(BoxLayout):
             self.mainwid.go_to_database()
 
         except Exception as e:
-            print(str(e))
             message = self.mainwid.Popup.ids.message
             self.mainwid.Popup.open()
             self.mainwid.Popup.title = "Error!"
