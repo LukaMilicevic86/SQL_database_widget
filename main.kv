@@ -107,7 +107,24 @@
             text:'Back'
             on_press: root.dismiss()
 
-
+<DataWid>
+    data: ''
+    data_id: ''
+    canvas:
+        Color:
+            rgb: 0.3, 0.3, 0.9
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    Label:
+        text: root.data
+        size_font: self.width * 0.4
+        size_hint_x: 0.9
+    Button:
+        size_hint_x: 0.1
+        text: 'Edit'
+        on_press: root.update_data(root.data_id)
+        
 
 
 
