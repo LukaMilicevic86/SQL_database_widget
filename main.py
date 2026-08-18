@@ -66,8 +66,14 @@ class MainWid(ScreenManager):
         IDW_wid.add_widget(self.InsertDataWid)
         self.add_widget(IDW_wid)
 
-        self.Popup = MessagePopup()
+        # add update data widget to screen and screen to screen manager
+        self.UpdateDataWid = UpdateDataWid(self, data_id = '0') #set to 0 as initial value since ID ise expected in the argument after clicking Edit button
+        UDW_wid = Screen(name = "UpdateData")
+        UDW_wid.add_widget(self.UpdateDataWid)
+        self.add_widget(UDW_wid)
 
+        self.Popup = MessagePopup()
+ 
         self.go_to_start()
 
     # open the start widget as current screen
@@ -85,6 +91,14 @@ class MainWid(ScreenManager):
         NewInsertDataWid = InsertDataWid(self)
         self.InsertDataWid.add_widget(NewInsertDataWid)
         self.current  = "InsertData"
+
+    #reset everything in update data widget and open that screen
+    def go_to_updatedata(self, data_id):
+        self.UpdateDataWid.clear_widgets()
+        UDW_wid = UpdateDataWid(self, data_id)
+        self.UpdateDataWid.add_widget(UDW_wid)
+        self.current = "UpdateData"
+    
 
 
 # 1st screen, start widget class:
@@ -117,11 +131,12 @@ class DataBaseWid(BoxLayout):
         for element in cursor:
             Dwid = DataWid(self.mainwid)
             r1 = "ID: " + str(element[0]) + "\n" #element zero is ID
-            r2 = element[1] + ", " + element[2] + "\n"
-            r3 = "Price: " + str(element[3]) + "\n"
-            r4 = "Quantity: " + str(element[4]) + "\n"
+            r2 = element[1] + "\n"
+            r3 = "Code: " + element[2] + "\n"
+            r4 = "Price: " + str(element[3]) + "\n"
+            r5 = "Quantity: " + str(element[4]) + "\n"
             Dwid.data_id = str(element[0]) #connects the primary key from the table to an ID to be used for editing
-            Dwid.data = r1 + r2 + r3 + r4
+            Dwid.data = r1 + r2 + r3 + r4 + r5
             self.ids.container.add_widget(Dwid)
 
         NDBwid = NewDataButton(self.mainwid) 
@@ -142,13 +157,13 @@ class NewDataButton(Button):
 class MessagePopup(Popup):
     ...
 
-# class for widgets to populate 2nd screen upon inserting data in the 3d
+# class for widgets to populate 2nd screen upon  inserting data in the 3d
 class DataWid(BoxLayout):
     def __init__(self, mainwid, **kwargs):
             super().__init__()
             self.mainwid = mainwid
     def update_data(self, data_id):
-        ...
+        self.mainwid.go_to_updatedata(data_id)
 # 3rd screen, widget to create new product and fill the data in the table columns
 class InsertDataWid(BoxLayout):
     def __init__(self, mainwid, **kwargs):
@@ -190,6 +205,25 @@ class InsertDataWid(BoxLayout):
     def back_to_dbw(self):
         self.mainwid.go_to_database()
 
+# 4th screen for editing the entries from the Database Widger
+class UpdateDataWid(BoxLayout):
+    def __init__(self, mainwid, data_id, **kwargs):
+        super().__init__()
+        self.mainwid = mainwid
+        self.data_id = data_id
+        self.check_memory()
+
+    def check_memory(self):
+        print("Check m from updatedatawid")
+
+    def delete_data(self):
+        ...
+
+    def update_data(self):
+        ...
+
+    def back_to_dbw(self):
+        self.mainwid.go_to_database()
 
 # main app class and instance:
 class MainApp(App):
