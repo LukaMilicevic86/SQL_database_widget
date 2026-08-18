@@ -7,11 +7,12 @@
             pos: self.pos
             size: self.size
 
+
 <StartWid>
     orientation: 'vertical'
     canvas:
         Color:
-            rgb: 0.3, 0.3, 0.9
+            rgb: 0.1, 0.4, 0.2
         Rectangle:
             pos: self.pos
             size: self.size
@@ -24,11 +25,12 @@
     BoxLayout:
         size_hint_y: 0.45
         
+
 <DataBaseWid>
     orientation: 'vertical'
     canvas:
         Color:
-            rgb: 0.3, 0.3, 0.9
+            rgb: 0.1, 0.4, 0.2
         Rectangle:
             pos: self.pos
             size: self.size
@@ -43,20 +45,23 @@
             row_default_height: root.height * 0.2
             height: self.minimum_height
 
+
 <NewDataButton>
     font_size: self.height * 0.5
     text: '+'
     on_press: root.create_new_product()
 
+
 <LeftLabel@Label>:
     text_size: self.size
     halign: 'left'
+
 
 <InsertDataWid>
     orientation: 'vertical'
     canvas:
         Color:
-            rgb: 0.3, 0.3, 0.9
+            rgb: 0.1, 0.4, 0.2
         Rectangle:
             pos: self.pos
             size: self.size
@@ -96,6 +101,7 @@
             text: 'Exit'
             on_press: root.back_to_dbw()
 
+
 <MessagePopup>
     BoxLayout:
         orientation: 'vertical'
@@ -107,12 +113,13 @@
             text:'Back'
             on_press: root.dismiss()
 
+
 <DataWid>
     data: ''
     data_id: ''
     canvas:
         Color:
-            rgb: 0.3, 0.3, 0.9
+            rgb: 0.3, 0.3, 0.3
         Rectangle:
             pos: self.pos
             size: self.size
@@ -124,9 +131,57 @@
         size_hint_x: 0.1
         text: 'Edit'
         on_press: root.update_data(root.data_id)
-        
 
 
+<UpdateDataWid>
+    orientation: 'vertical'
+    data_id: ''
+    canvas:
+        Color:
+            rgb: 0.1, 0.4, 0.2
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    LeftLabel:
+        text: 'ID: ' + root.data_id
+
+    LeftLabel:
+        text: 'Name'
+    TextInput:
+        id: ti_name
+
+    LeftLabel:
+        text: 'Code'
+    TextInput:
+        id: ti_code
+
+    LeftLabel:
+        text: 'Price'
+    TextInput:
+        id: ti_price
+
+    LeftLabel:
+        text: 'Quantity'
+    TextInput:
+        id: ti_quantity
+
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint_y: 5
+
+    BoxLayout:
+        Button:
+            text: 'Confirm'
+            on_press: root.update_data()
+        Button:
+            text: 'Delete'
+            on_press: root.delete_data()
+    BoxLayout:
+        orientation: 'vertical'
+        Button:
+            text: 'Exit'
+            on_press: root.back_to_dbw()
 
 
 
