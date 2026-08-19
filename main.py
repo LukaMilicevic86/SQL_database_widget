@@ -125,10 +125,11 @@ class DataBaseWid(BoxLayout):
 
         con = sqlite3.connect(self.mainwid.DB_PATH) #connect to database
         cursor = con.cursor()
+        # SQL command for cursor to select all columns intable, row by row:
         cursor.execute(
             'SELECT ID, Name, Code, Price, Quantity FROM products'
         )
-        for element in cursor:
+        for element in cursor: # element is each row
             Dwid = DataWid(self.mainwid)
             r1 = "ID: " + str(element[0]) + "\n" #element zero is ID
             r2 = element[1] + "\n"
@@ -162,7 +163,7 @@ class DataWid(BoxLayout):
     def __init__(self, mainwid, **kwargs):
             super().__init__()
             self.mainwid = mainwid
-    def update_data(self, data_id):
+    def open_update_data(self, data_id):
         self.mainwid.go_to_updatedata(data_id)
 # 3rd screen, widget to create new product and fill the data in the table columns
 class InsertDataWid(BoxLayout):
@@ -183,8 +184,8 @@ class InsertDataWid(BoxLayout):
 
         a1 = (d1, d2, d3, d4)
 
-        s1 = 'INSERT INTO products(Name,Code,Price,Quantity)'
-        s2 = 'VALUES("%s", "%s", %s, %s)' %a1 # %s are placeholders for strings and numbers
+        s1 = 'INSERT INTO products (Name, Code, Price, Quantity)'
+        s2 = 'VALUES("%s", "%s", %s, %s)' %a1 # %s are SQL placeholders for strings and numbers from the python code, after the %
 
         try:
             cursor.execute(s1 + " " + s2)
@@ -211,15 +212,50 @@ class UpdateDataWid(BoxLayout):
         super().__init__()
         self.mainwid = mainwid
         self.data_id = data_id
-        self.check_memory()
+        self.check_updatedata_memory()
 
-    def check_memory(self):
-        print("Check m from updatedatawid")
+    def check_updatedata_memory(self):
 
-    def delete_data(self):
-        ...
+        con = sqlite3.connect(self.mainwid.DB_PATH)
+        cursor = con.cursor()
+
+        # SQL command for cursor to select all columns in table in row with corresponding primary key:
+        s = 'SELECT Name, Code, Price, Quantity FROM products WHERE ID = '
+
+        cursor.execute(s + self.data_id)
+
+        for element in cursor: # element is each row
+            self.ids.ti_name.text = str(element[0])
+            self.ids.ti_code.text = str(element[1])
+            self.ids.ti_price.text = str(element[2])
+            self.ids.ti_quantity.text = str(element[3])
+
+        con.close()
 
     def update_data(self):
+        con = sqlite3.connect(self.mainwid.DB_PATH)
+        cursor = con.cursor()
+
+        d1 = self.ids.ti_name.text
+        d2 = self.ids.ti_code.text
+        d3 = self.ids.ti_price.text
+        d4 = self.ids.ti_quantity.text
+        
+
+        a1 = (d1, d2, d3, d4)
+
+        # SQL syntax for cursor to update each column with elements from a1 through placeholders
+        s1 = 'UPDATE products SET'
+        s2 = 'Name = "%s", Code = "%s", Price = %s, Quantity = %s' %a1   
+        s3 = 'WHERE ID = %s' %self.data_id
+
+        cursor.execute(s1 + " " + s2 + " " + s3)
+        con.commit()
+        con.close()
+        self.mainwid.go_to_database()
+    
+                
+    def delete_data(self):
         ...
 
     def back_to_dbw(self):
