@@ -19,7 +19,7 @@ def connect_to_database(path):
     try:
         con = sqlite3.connect(path)
         cursor = con.cursor()
-        create_table_products(cursor)
+        create_table_products(cursor) # call the function with sql syntax to define columns, using cursor object from row above as its argument
         con.commit()
         con.close()
     except Exception as e:
@@ -38,7 +38,6 @@ def create_table_products(cursor):
         )
         """
     )
-
 
 # Mmin widget class:
 class MainWid(ScreenManager):
@@ -88,7 +87,7 @@ class MainWid(ScreenManager):
     #reset everything in insert data widget and open that screen
     def go_to_insertdata(self):
         self.InsertDataWid.clear_widgets() #clears everything from last time
-        NewInsertDataWid = InsertDataWid(self)
+        NewInsertDataWid = InsertDataWid(self) #creates new object of this class and adds it to the xcreen
         self.InsertDataWid.add_widget(NewInsertDataWid)
         self.current  = "InsertData"
 
@@ -158,7 +157,7 @@ class NewDataButton(Button):
 class MessagePopup(Popup):
     ...
 
-# class for widgets to populate 2nd screen upon  inserting data in the 3d
+# class for widgets to populate 2nd screen upon inserting data in the 3d
 class DataWid(BoxLayout):
     def __init__(self, mainwid, **kwargs):
             super().__init__()
