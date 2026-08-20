@@ -256,7 +256,13 @@ class UpdateDataWid(BoxLayout):
     
                 
     def delete_data(self):
-        ...
+        con = sqlite3.connect(self.mainwid.DB_PATH)
+        cursor = con.cursor()
+        s = 'DELETE FROM products WHERE ID = ' + self.data_id
+        cursor.execute(s)
+        con.commit()
+        con.close()
+        self.mainwid.go_to_database()
 
     def back_to_dbw(self):
         self.mainwid.go_to_database()
